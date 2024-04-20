@@ -17,6 +17,27 @@ provider "aws" {
 resource "aws_instance" "webserver" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
+
+  tags = {
+    Name = "ubuntu"
+  }
+}
+
+resource "aws_vpc" "webserver_vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "production"
+  }
+}
+
+resource "aws_subnet" "webserver_subnet" {
+  vpc_id     = aws_vpc.webserver_vpc.id
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "prod-subnet"
+  }
 }
 
 # resource "<provider>_<resource_type>" "name" {
